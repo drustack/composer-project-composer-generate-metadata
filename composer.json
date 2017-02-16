@@ -1,0 +1,45 @@
+{
+    "authors": [
+        {
+            "email": "hswong3i@pantarei-design.com",
+            "homepage": "http://hswong3i.net",
+            "name": "Wong Hoi Sing Edison"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "DruStack\\Composer\\GenerateMetadata\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DruStack\\Composer\\GenerateMetadata\\Tests\\": "tests/"
+        }
+    },
+    "description": "Composer plugin for generate drupal packages metadata into info files",
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "0.x-dev",
+            "dev-master": "0.0.x-dev"
+        },
+        "class": "DruStack\\Composer\\GenerateMetadata\\Plugin"
+    },
+    "keywords": [
+        "composer-plugin",
+        "installer"
+    ],
+    "license": "GPL-2.0+",
+    "name": "drustack/composer-generate-metadata",
+    "require": {
+        "composer-plugin-api": "~1.0"
+    },
+    "require-dev": {
+        "composer/composer": "~1.0"
+    },
+    "scripts": {
+        "coveralls": "coveralls -v; exit 0",
+        "php-cs-fixer": "php-cs-fixer fix; exit 0",
+        "phpunit": "phpunit -c phpunit.xml.dist; exit 0"
+    },
+    "type": "composer-plugin"
+}
