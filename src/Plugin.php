@@ -104,7 +104,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                     $finder = new Finder();
                     $finder
                         ->files()
-                        ->in($install_path)
+                        ->in($installPath)
                         ->name('*.info')
                         ->notContains('datestamp =');
                     foreach ($finder as $file) {
