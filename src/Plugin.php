@@ -10,9 +10,10 @@ namespace DruStack\Composer\GenerateMetadata;
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
-use Composer\Plugin\PluginInterface;
 use Composer\Installer\PackageEvent;
+use Composer\Plugin\PluginInterface;
 use Composer\Script\ScriptEvents;
+use Symfony\Component\Process\Process;
 
 /**
  * Class Plugin.
