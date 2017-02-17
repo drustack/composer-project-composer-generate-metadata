@@ -99,19 +99,36 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                 // Compute the rebuild version string for a project.
                 $version = $this->computeRebuildVersion($installPath, $branch) ?: $version;
 
-                // Generate version information for `.info.yml` files in YAML format.
-                $finder = new Finder();
-                $finder
-                    ->files()
-                    ->in($installPath)
-                    ->name('*.info.yml')
-                    ->notContains('datestamp:');
-                foreach ($finder as $file) {
-                    file_put_contents(
-                        $file->getRealpath(),
-                        $this->generateInfoYamlMetadata($version, $project, $datestamp),
-                        FILE_APPEND
-                    );
+                if ($this->core == '7') {
+                    // Generate version information for `.info` files in ini format.
+                    $finder = new Finder();
+                    $finder
+                        ->files()
+                        ->in($install_path)
+                        ->name('*.info')
+                        ->notContains('datestamp =');
+                    foreach ($finder as $file) {
+                        file_put_contents(
+                            $file->getRealpath(),
+                            $this->generateInfoIniMetadata($version, $project, $datestamp),
+                            FILE_APPEND
+                        );
+                    }
+                } else {
+                    // Generate version information for `.info.yml` files in YAML format.
+                    $finder = new Finder();
+                    $finder
+                        ->files()
+                        ->in($installPath)
+                        ->name('*.info.yml')
+                        ->notContains('datestamp:');
+                    foreach ($finder as $file) {
+                        file_put_contents(
+                            $file->getRealpath(),
+                            $this->generateInfoYamlMetadata($version, $project, $datestamp),
+                            FILE_APPEND
+                        );
+                    }
                 }
             }
         }
@@ -160,6 +177,27 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         }
 
         return $version;
+    }
+
+    /**
+     * Generate version information for `.info` files in ini format.
+     *
+     * @see _drush_pm_generate_info_ini_metadata()
+     */
+    protected function generateInfoIniMetadata($version, $project, $datestamp)
+    {
+        $core = preg_replace('/^([0-9]).*$/', '$1.x', $version);
+        $date = date('Y-m-d', $datestamp);
+        $info = <<<METADATA
+
+; Information add by composer on {$date}
+core = "{$core}"
+project = "{$project}"
+version = "{$version}"
+datestamp = "{$datestamp}"
+METADATA;
+
+        return $info;
     }
 
     /**
