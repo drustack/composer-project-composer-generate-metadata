@@ -71,8 +71,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            ScriptEvents::POST_PACKAGE_INSTALL => 'generateInfoMetadata',
-            ScriptEvents::POST_PACKAGE_UPDATE => 'generateInfoMetadata',
+            ScriptEvents::POST_PACKAGE_INSTALL => array('generateInfoMetadata', -99),
+            ScriptEvents::POST_PACKAGE_UPDATE => array('generateInfoMetadata', -99),
         ];
     }
 
