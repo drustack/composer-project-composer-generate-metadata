@@ -190,7 +190,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $date = date('Y-m-d', $datestamp);
         $info = <<<METADATA
 
-; Information add by composer on {$date}
+; Information add by drustack/composer-generate-metadata on {$date}
 core = "{$core}"
 project = "{$project}"
 version = "{$version}"
@@ -211,7 +211,7 @@ METADATA;
         $date = date('Y-m-d', $datestamp);
         $info = <<<METADATA
 
-# Information add by composer on {$date}
+# Information add by drustack/composer-generate-metadata on {$date}
 core: "{$core}"
 project: "{$project}"
 version: "{$version}"
