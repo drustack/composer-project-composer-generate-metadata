@@ -10,8 +10,10 @@ namespace DruStack\Composer\GenerateMetadata;
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
+use Composer\Installer\InstallationManager;
 use Composer\Installer\PackageEvent;
 use Composer\Plugin\PluginInterface;
+use Composer\Repository\ComposerRepository;
 use Composer\Script\ScriptEvents;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
@@ -21,6 +23,11 @@ use Symfony\Component\Process\Process;
  */
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
+    /**
+     * The expected Drupal core version.
+     */
+    protected $core;
+
     /**
      * @var \Composer\Composer
      */
@@ -41,10 +48,21 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function activate(Composer $composer, IOInterface $io)
     {
-        $this->composer = $composer;
         $this->io = $io;
+        $this->composer = $composer;
+        $this->installationManager = $composer->getInstallationManager();
 
-        $this->installationManager = $this->composer->getInstallationManager();
+        // Check Drupal core version.
+        $repositories = $composer->getRepositoryManager()->getRepositories();
+        foreach ($repositories as $repository) {
+            if ($repository instanceof ComposerRepository) {
+                $repoConfig = $repository->getRepoConfig();
+                if (preg_match('/packages\.drupal\.org\/([0-9]*)$/', $repoConfig['url'], $matches)) {
+                    $this->core = $matches[1];
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -66,7 +84,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     public function generateInfoMetadata(PackageEvent $event)
     {
         $op = $event->getOperation();
-
         $package = $op->getJobType() == 'update'
             ? $op->getTargetPackage()
             : $op->getPackage();
@@ -75,7 +92,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         if (preg_match('/^drupal-/', $package->getType())) {
             if (preg_match('/^dev-/', $package->getPrettyVersion())) {
                 $project = preg_replace('/^.*\//', '', $package->getName());
-                $version = preg_replace('/^dev-(.*)/', '8.x-$1-dev', $package->getPrettyVersion());
+                $version = preg_replace('/^dev-(.*)/', $this->core.'.x-$1-dev', $package->getPrettyVersion());
                 $branch = preg_replace('/^([0-9]*\.x-[0-9]*).*$/', '$1', $version);
                 $datestamp = time();
 
