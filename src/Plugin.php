@@ -12,9 +12,9 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Installer\InstallationManager;
 use Composer\Installer\PackageEvent;
+use Composer\Installer\PackageEvents;
 use Composer\Plugin\PluginInterface;
 use Composer\Repository\ComposerRepository;
-use Composer\Script\ScriptEvents;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 
@@ -71,8 +71,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            PackageEvents::POST_PACKAGE_INSTALL => array('generateInfoMetadata', -99),
-            PackageEvents::POST_PACKAGE_UPDATE => array('generateInfoMetadata', -99),
+            PackageEvents::POST_PACKAGE_INSTALL => ['generateInfoMetadata', -99],
+            PackageEvents::POST_PACKAGE_UPDATE => ['generateInfoMetadata', -99],
         ];
     }
 
