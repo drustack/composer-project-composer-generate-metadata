@@ -32,12 +32,19 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     protected $io;
 
     /**
+     * @var \Composer\Installer\InstallationManager
+     */
+    protected $installationManager;
+
+    /**
      * {@inheritdoc}
      */
     public function activate(Composer $composer, IOInterface $io)
     {
         $this->composer = $composer;
         $this->io = $io;
+
+        $this->installationManager = $this->composer->getInstallationManager();
     }
 
     /**
@@ -59,12 +66,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     public function generateInfoMetadata(PackageEvent $event)
     {
         $op = $event->getOperation();
-        $installation_manager = $this->composer->getInstallationManager();
 
         $package = $op->getJobType() == 'update'
             ? $op->getTargetPackage()
             : $op->getPackage();
-        $install_path = $installation_manager->getInstallPath($package);
+        $installPath = $this->installationManager->getInstallPath($package);
 
         if (preg_match('/^drupal-/', $package->getType())) {
             if (preg_match('/^dev-/', $package->getPrettyVersion())) {
@@ -74,13 +80,13 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                 $datestamp = time();
 
                 // Compute the rebuild version string for a project.
-                $version = $this->computeRebuildVersion($install_path, $branch) ?: $version;
+                $version = $this->computeRebuildVersion($installPath, $branch) ?: $version;
 
                 // Generate version information for `.info.yml` files in YAML format.
                 $finder = new Finder();
                 $finder
                     ->files()
-                    ->in($install_path)
+                    ->in($installPath)
                     ->name('*.info.yml')
                     ->notContains('datestamp:');
                 foreach ($finder as $file) {
@@ -110,19 +116,19 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @see drush_pm_git_drupalorg_compute_rebuild_version()
      */
-    protected function computeRebuildVersion($install_path, $branch)
+    protected function computeRebuildVersion($installPath, $branch)
     {
         $version = '';
-        $branch_preg = preg_quote($branch);
+        $branchPreg = preg_quote($branch);
 
-        $process = new Process("cd $install_path; git describe --tags");
+        $process = new Process("cd $installPath; git describe --tags");
         $process->run();
         if ($process->isSuccessful()) {
-            $last_tag = strtok($process->getOutput(), "\n");
+            $lastTag = strtok($process->getOutput(), "\n");
             // Make sure the tag starts as Drupal formatted (for eg.
             // 7.x-1.0-alpha1) and if we are on a proper branch (ie. not master)
             // then it's on that branch.
-            if (preg_match('/^(?<drupalversion>'.$branch_preg.'\.\d+(?:-[^-]+)?)(?<gitextra>-(?<numberofcommits>\d+-)g[0-9a-f]{7})?$/', $last_tag, $matches)) {
+            if (preg_match('/^(?<drupalversion>'.$branchPreg.'\.\d+(?:-[^-]+)?)(?<gitextra>-(?<numberofcommits>\d+-)g[0-9a-f]{7})?$/', $lastTag, $matches)) {
                 if (isset($matches['gitextra'])) {
                     // If we found additional git metadata (in particular, number of commits)
                     // then use that info to build the version string.
@@ -131,7 +137,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                     // Otherwise, the branch tip is pointing to the same commit as the
                     // last tag on the branch, in which case we use the prior tag and
                     // add '+0-dev' to indicate we're still on a -dev branch.
-                    $version = $last_tag.'+0-dev';
+                    $version = $lastTag.'+0-dev';
                 }
             }
         }
