@@ -71,8 +71,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            ScriptEvents::POST_PACKAGE_INSTALL => array('generateInfoMetadata', -99),
-            ScriptEvents::POST_PACKAGE_UPDATE => array('generateInfoMetadata', -99),
+            PackageEvents::POST_PACKAGE_INSTALL => array('generateInfoMetadata', -99),
+            PackageEvents::POST_PACKAGE_UPDATE => array('generateInfoMetadata', -99),
         ];
     }
 
@@ -91,10 +91,13 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
         if (preg_match('/^drupal-/', $package->getType())) {
             if (preg_match('/^dev-/', $package->getPrettyVersion())) {
-                $project = preg_replace('/^.*\//', '', $package->getName());
+                $name = $package->getName();
+                $project = preg_replace('/^.*\//', '', $name);
                 $version = preg_replace('/^dev-(.*)/', $this->core.'.x-$1-dev', $package->getPrettyVersion());
                 $branch = preg_replace('/^([0-9]*\.x-[0-9]*).*$/', '$1', $version);
                 $datestamp = time();
+
+                $this->io->write('  - Generating metadata for <info>'.$name.'</info>');
 
                 // Compute the rebuild version string for a project.
                 $version = $this->computeRebuildVersion($installPath, $branch) ?: $version;
