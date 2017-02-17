@@ -13,6 +13,7 @@ use Composer\IO\IOInterface;
 use Composer\Installer\PackageEvent;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\ScriptEvents;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 
 /**
