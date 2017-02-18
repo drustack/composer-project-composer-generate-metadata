@@ -12,10 +12,11 @@ before_install:
   - composer global require --no-update hirak/prestissimo:@stable
   - composer global update
   - export PATH="$PATH:$HOME/.composer/vendor/bin"
-  - curl -sL https://phar.phpunit.de/phpunit-5.7.phar > /usr/local/bin/phpunit
-  - chmod 755 /usr/local/bin/phpunit
-  - curl -sL https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar > /usr/local/bin/coveralls
-  - chmod 755 /usr/local/bin/coveralls
+  - mkdir -p ~/bin
+  - curl -sL https://phar.phpunit.de/phpunit-5.7.phar > ~/bin/phpunit
+  - chmod 755 ~/bin/phpunit
+  - curl -sL https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar > ~/bin/coveralls
+  - chmod 755 ~/bin/coveralls
 
 install:
   - composer install --prefer-source
