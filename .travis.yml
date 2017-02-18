@@ -25,10 +25,10 @@ before_script:
   - mkdir -p build/logs
 
 script:
-  - composer phpunit
+  - phpunit -c phpunit.xml.dist
 
 after_script:
-  - composer coveralls
+  - travis_retry coveralls -v
 
 matrix:
   include:

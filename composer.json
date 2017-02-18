@@ -37,10 +37,5 @@
         "composer/composer": "~1.0",
         "phpunit/phpunit": "~5.7"
     },
-    "scripts": {
-        "coveralls": "coveralls -v; exit 0",
-        "php-cs-fixer": "php-cs-fixer fix; exit 0",
-        "phpunit": "phpunit -c phpunit.xml.dist; exit 0"
-    },
     "type": "composer-plugin"
 }
