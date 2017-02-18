@@ -36,7 +36,9 @@ In case of Drupal 8.x, following metadata will be injected into `.info.yml` file
 Installation
 ------------
 
-Simply install the plugin with composer: `composer require drustack/composer-generate-metadata`
+Simply install the plugin with composer:
+
+    $ composer require drustack/composer-generate-metadata:~1.0
 
 Configuration
 -------------
@@ -50,7 +52,7 @@ Drupal.org provides two separate composer repository endpoints: one for Drupal 7
 
 To add the repository from the command line you should execute the following command from your repository root:
 
-    $ composer config repositories.drupal composer <https://packages.drupal.org/8>
+    $ composer config repositories.drupal composer https://packages.drupal.org/7
 
 Composer will then automatically update your Drupal site's composer.json file with a repositories object of the format:
 
