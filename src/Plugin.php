@@ -215,8 +215,8 @@ METADATA;
         $info = <<<METADATA
 
 # Information add by drustack/composer-generate-metadata on {$date}
-version: "{$version}"
 project: "{$project}"
+version: "{$version}"
 datestamp: "{$datestamp}"
 METADATA;
 
