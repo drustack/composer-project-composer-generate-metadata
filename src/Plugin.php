@@ -194,9 +194,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $info = <<<METADATA
 
 ; Information add by drustack/composer-generate-metadata on {$date}
+version = "{$version}"
 core = "{$core}"
 project = "{$project}"
-version = "{$version}"
 datestamp = "{$datestamp}"
 METADATA;
 
@@ -215,9 +215,8 @@ METADATA;
         $info = <<<METADATA
 
 # Information add by drustack/composer-generate-metadata on {$date}
-core_version_requirement: "^8.7.7 || ^9"
-project: "{$project}"
 version: "{$version}"
+project: "{$project}"
 datestamp: "{$datestamp}"
 METADATA;
 
