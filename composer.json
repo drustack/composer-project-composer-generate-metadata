@@ -16,7 +16,7 @@
             "DruStack\\Composer\\GenerateMetadata\\Tests\\": "tests/"
         }
     },
-    "description": "Composer plugin for generate drupal packages metadata into info files",
+    "description": "Composer plugin for generate Drupal packages metadata into info files",
     "extra": {
         "branch-alias": {
             "dev-develop": "0.x-dev",
@@ -26,6 +26,7 @@
     },
     "keywords": [
         "composer-plugin",
+        "drupal",
         "installer"
     ],
     "license": "GPL-2.0+",
@@ -36,11 +37,6 @@
     "require-dev": {
         "composer/composer": "~1.0",
         "phpunit/phpunit": "~5.7"
-    },
-    "scripts": {
-        "coveralls": "coveralls -v; exit 0",
-        "php-cs-fixer": "php-cs-fixer fix; exit 0",
-        "phpunit": "phpunit -c phpunit.xml.dist; exit 0"
     },
     "type": "composer-plugin"
 }
