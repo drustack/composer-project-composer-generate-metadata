@@ -111,6 +111,16 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                         ->name('*.info')
                         ->notContains('datestamp =');
                     foreach ($finder as $file) {
+                        // Remove `version` and `project` lines.
+                        file_put_contents(
+                            $file->getRealpath(),
+                            preg_replace(
+                                '^\s*(version|project)\s*=.*$\n',
+                                '',
+                                file_get_contents($file->getRealpath())
+                            )
+                        );
+                        // Append generated version information.
                         file_put_contents(
                             $file->getRealpath(),
                             $this->generateInfoIniMetadata($version, $project, $datestamp),
@@ -126,6 +136,16 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                         ->name('*.info.yml')
                         ->notContains('datestamp:');
                     foreach ($finder as $file) {
+                        // Remove `version` and `project` lines.
+                        file_put_contents(
+                            $file->getRealpath(),
+                            preg_replace(
+                                '^\s*(version|project)\s*:.*$\n',
+                                '',
+                                file_get_contents($file->getRealpath())
+                            )
+                        );
+                        // Append generated version information.
                         file_put_contents(
                             $file->getRealpath(),
                             $this->generateInfoYamlMetadata($version, $project, $datestamp),
