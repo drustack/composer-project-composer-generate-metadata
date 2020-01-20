@@ -115,7 +115,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                         file_put_contents(
                             $file->getRealpath(),
                             preg_replace(
-                                '/^\s*(version|project)\s*=.*$\n/',
+                                '/^\s*(version|project)\s*=.*\n/',
                                 '',
                                 file_get_contents($file->getRealpath())
                             )
@@ -140,7 +140,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                         file_put_contents(
                             $file->getRealpath(),
                             preg_replace(
-                                '/^\s*(version|project)\s*:.*$\n/',
+                                '/^\s*(version|project)\s*:.*\n/',
                                 '',
                                 file_get_contents($file->getRealpath())
                             )
