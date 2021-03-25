@@ -2,8 +2,6 @@
 
 namespace DruStack\Composer\GenerateMetadata\Tests;
 
-use Composer\Composer;
-use Composer\Config;
 use Composer\Factory;
 use Composer\Util\Filesystem;
 use DruStack\Composer\GenerateMetadata\Plugin;
@@ -19,7 +17,7 @@ class GenerateMetadataPluginTest extends TestCase
     private $vendorDir;
     private $binDir;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,7 +46,7 @@ class GenerateMetadataPluginTest extends TestCase
         $this->composer = $factory->createComposer($this->io, $config);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->fs->removeDirectory($this->archiveDir);
         $this->fs->removeDirectory($this->vendorDir);
