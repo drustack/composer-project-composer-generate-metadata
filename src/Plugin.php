@@ -9,10 +9,9 @@ namespace DruStack\Composer\GenerateMetadata;
 
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
-use Composer\IO\IOInterface;
-use Composer\Installer\InstallationManager;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
+use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Repository\ComposerRepository;
 use Symfony\Component\Finder\Finder;
@@ -66,6 +65,20 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function deactivate(Composer $composer, IOInterface $io)
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function uninstall(Composer $composer, IOInterface $io)
+    {
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -84,7 +97,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     public function generateInfoMetadata(PackageEvent $event)
     {
         $op = $event->getOperation();
-        $package = $op->getJobType() == 'update'
+        $package = 'update' == $op->getJobType()
             ? $op->getTargetPackage()
             : $op->getPackage();
         $installPath = $this->installationManager->getInstallPath($package);
@@ -102,7 +115,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                 // Compute the rebuild version string for a project.
                 $version = $this->computeRebuildVersion($installPath, $branch) ?: $version;
 
-                if ($this->core == '7') {
+                if ('7' == $this->core) {
                     // Generate version information for `.info` files in ini format.
                     $finder = new Finder();
                     $finder

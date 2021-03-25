@@ -51,7 +51,7 @@ In case of Drupal 8.x, following metadata will be injected into
 
 Simply install the plugin with composer:
 
-    $ composer require drustack/composer-generate-metadata:~1.0
+    $ composer require drustack/composer-generate-metadata:~2.0
 
 ## Configuration
 
@@ -99,7 +99,7 @@ An example composer.json:
         "require": {
             "drupal/drupal": "~7.54",
             "drupal/features": "2.x-dev",
-            "drustack/composer-generate-metadata": "~1.0"
+            "drustack/composer-generate-metadata": "~2.0"
         }
     }
 
