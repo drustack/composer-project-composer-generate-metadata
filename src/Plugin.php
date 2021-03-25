@@ -8,6 +8,7 @@
 namespace DruStack\Composer\GenerateMetadata;
 
 use Composer\Composer;
+use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
@@ -97,9 +98,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     public function generateInfoMetadata(PackageEvent $event)
     {
         $op = $event->getOperation();
-        $package = 'update' == $op->getJobType()
-            ? $op->getTargetPackage()
-            : $op->getPackage();
+        $package = ($op instanceof InstallOperation)
+            ? $op->getPackage()
+            : $op->getTargetPackage();
         $installPath = $this->installationManager->getInstallPath($package);
 
         if (preg_match('/^drupal-/', $package->getType())) {
