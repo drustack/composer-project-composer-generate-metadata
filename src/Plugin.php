@@ -109,8 +109,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                 $this->project = preg_replace('/^drupal\//', '', $name);
                 $this->version = $extra['drupal']['version']
                     ?: preg_replace('/^(dev)-(.*)$/', '$2-$1', $package->getPrettyVersion());
-                $this->datestamp = $extra['drupal']['datestamp']
-                    ?: strtotime($package->getReleaseDate());
+                $this->datestamp = time();
 
                 // Generate version information for `.info.yml` files in YAML format.
                 $finder = new Finder();
@@ -151,9 +150,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $info = <<<METADATA
 
 # Information add by drustack/composer-generate-metadata on {$date}
-version: "{$this->version}"
-project: "{$this->project}"
-datestamp: "{$this->datestamp}"
+version: '{$this->version}'
+project: '{$this->project}'
+datestamp: {$this->datestamp}
 
 METADATA;
 
