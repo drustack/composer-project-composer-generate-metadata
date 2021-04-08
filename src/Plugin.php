@@ -97,18 +97,20 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $package = ($op instanceof InstallOperation)
             ? $op->getPackage()
             : $op->getTargetPackage();
-        $extra = $package->getExtra();
 
         if (preg_match('/^drupal-/', $package->getType())) {
             if (preg_match('/^dev-/', $package->getPrettyVersion())) {
-                // Compute the rebuild version string for a project.
-                $this->project = preg_replace('/^drupal\//', '', $package->getName());
-                $this->version = $extra['drupal']['version']
-                    ?: preg_replace('/^dev-(.*)/', '$1-dev', $package->getPrettyVersion());
-                $this->datestamp = $extra['drupal']['datestamp']
-                    ?: time();
+                $name = $package->getName();
+                $extra = $package->getExtra();
 
-                $this->io->write('  - Generating metadata for <info>'.$this->project.'</info>');
+                $this->io->write('  - Generating metadata for <info>'.$name.'</info>');
+
+                // Compute the rebuild version string for a project.
+                $this->project = preg_replace('/^drupal\//', '', $name);
+                $this->version = $extra['drupal']['version']
+                    ?: preg_replace('/^(dev)-(.*)$/', '$2-$1', $package->getPrettyVersion());
+                $this->datestamp = $extra['drupal']['datestamp']
+                    ?: strtotime($package->getReleaseDate());
 
                 // Generate version information for `.info.yml` files in YAML format.
                 $finder = new Finder();
