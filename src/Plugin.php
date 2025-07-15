@@ -107,8 +107,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
                 // Compute the rebuild version string for a project.
                 $this->project = preg_replace('/^drupal\//', '', $name);
-                $this->version = $extra['drupal']['version']
-                    ?: preg_replace('/^(dev)-(.*)$/', '$2-$1', $package->getPrettyVersion());
+                $this->version = isset($extra['drupal']) && $extra['drupal']['version']
+                    ? $extra['drupal']['version']
+                    : preg_replace('/^(dev)-(.*)$/', '$2-$1', $package->getPrettyVersion());
                 $this->datestamp = time();
 
                 // Generate version information for `.info.yml` files in YAML format.
