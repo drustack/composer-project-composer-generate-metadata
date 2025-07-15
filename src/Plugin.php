@@ -49,7 +49,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * @var string
      */
-    protected $datastamp;
+    protected $datestamp;
 
     /**
      * {@inheritdoc}
